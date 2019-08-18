@@ -26,11 +26,11 @@ public class MyService extends Service {
         Log.d(TAG, "onRebind: ");
     }
 
+
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind: ");
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return  new MyBinder();
     }
 
     @Override
