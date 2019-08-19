@@ -4,11 +4,13 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +28,10 @@ public class MainActivity extends AppCompatActivity {
     Button btnUnbind;
 
     private static final String TAG = "MyService-1";
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
     private ServiceConnection conn;
+    private MyService.MyBinder myBinder;
 
 
     @Override
@@ -39,10 +44,27 @@ public class MainActivity extends AppCompatActivity {
         conn = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                Log.d(TAG, "onServiceConnected: ");
-                MyBinder myBinder = (MyBinder) service;
-                myBinder.taskA();
-                myBinder.taskB();
+                myBinder = (MyService.MyBinder) service;
+
+                //利用订时器订时获得服务中的进度
+                //第一个参数是订时器总的运行时间,第二个参数是订时器间隔调用时间
+                CountDownTimer countDownTimer = new CountDownTimer(100000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        int progress = myBinder.getProgress();
+                        progressBar.setProgress(progress);
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        progressBar.setProgress(100);
+                    }
+                };
+
+                countDownTimer.start();
+
+
             }
 
             @Override
@@ -50,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onServiceDisconnected: ");
             }
         };
+
+
+
+
 
     }
 
@@ -64,16 +90,16 @@ public class MainActivity extends AppCompatActivity {
     onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_start:
-                Intent it1 = new Intent(MainActivity.this,MyService.class);
+                Intent it1 = new Intent(MainActivity.this, MyService.class);
                 startService(it1);
                 break;
             case R.id.btn_stop:
-                Intent it2 = new Intent(MainActivity.this,MyService.class);
+                Intent it2 = new Intent(MainActivity.this, MyService.class);
                 stopService(it2);
                 break;
             case R.id.btn_bind:
-                Intent it3 = new Intent(MainActivity.this,MyService.class);
-                bindService(it3, conn,BIND_AUTO_CREATE);
+                Intent it3 = new Intent(MainActivity.this, MyService.class);
+                bindService(it3, conn, BIND_AUTO_CREATE);
                 break;
             case R.id.btn_unbind:
                 unbindService(conn);
