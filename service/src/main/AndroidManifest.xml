@@ -12,7 +12,11 @@
         <service
             android:name=".MyService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.action.servicedemo"></action>
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".MainActivity"
