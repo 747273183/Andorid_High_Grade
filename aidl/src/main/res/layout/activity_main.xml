@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+  <Button
+      android:id="@+id/btn_start"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="启动远程服务"
+      />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="停止远程服务"
+        />
+    <Button
+        android:id="@+id/btn_bind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="绑定远程服务"
+        />
+
+    <Button
+        android:id="@+id/btn_unbind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="解绑远程服务"
+        />
+
+  <ProgressBar
+      android:id="@+id/progressBar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+      />
+
+
+</LinearLayout>

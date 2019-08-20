@@ -1,4 +1,4 @@
-package com.example.andorid_high_grade;
+package com.example.aidl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.andorid_high_grade", appContext.getPackageName());
+        assertEquals("com.example.aidl", appContext.getPackageName());
     }
 }

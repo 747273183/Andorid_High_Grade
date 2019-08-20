@@ -1,4 +1,4 @@
-package com.example.andorid_high_grade;
+package com.example.service;
 
 import android.app.Service;
 import android.content.Intent;

@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.showappinfo.bean.App;
@@ -55,7 +54,7 @@ public class MyService extends Service {
                 }
 
                 //发送本地广播,通知MainActivity数据查询完成
-                Log.d(TAG, "run: 数据查询服务完成,已发送本地广播");
+                Log.d(TAG, "onStartCommand run: 数据查询服务完成,已发送本地广播");
                 intent = new Intent("com.example.showappinfo.action.QUERY_COMPLETE");
                 broadcastManager = LocalBroadcastManager.getInstance(MyService.this);
                 broadcastManager.sendBroadcast(intent);
