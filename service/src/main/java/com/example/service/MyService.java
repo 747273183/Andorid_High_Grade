@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
 public class MyService extends Service {
@@ -47,7 +48,17 @@ public class MyService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind: ");
-        return  new MyBinder();
+        return  new IMyAidlInterface.Stub(){
+            @Override
+            public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
+
+            }
+
+            @Override
+            public void showProgress() throws RemoteException {
+                Log.d(TAG, "当前服务的进度: "+i);
+            }
+        };
     }
 
 

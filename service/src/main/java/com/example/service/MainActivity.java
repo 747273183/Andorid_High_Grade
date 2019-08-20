@@ -6,6 +6,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -44,25 +45,29 @@ public class MainActivity extends AppCompatActivity {
         conn = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                myBinder = (MyService.MyBinder) service;
+                IMyAidlInterface myAidlInterface = IMyAidlInterface.Stub.asInterface(service);
+                try {
+                    myAidlInterface.showProgress();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
 
-                //利用订时器订时获得服务中的进度
-                //第一个参数是订时器总的运行时间,第二个参数是订时器间隔调用时间
-                CountDownTimer countDownTimer = new CountDownTimer(100000, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        int progress = myBinder.getProgress();
-                        progressBar.setProgress(progress);
 
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        progressBar.setProgress(100);
-                    }
-                };
-
-                countDownTimer.start();
+//                myBinder = (MyService.MyBinder) service;
+//                //利用订时器订时获得服务中的进度
+//                //第一个参数是订时器总的运行时间,第二个参数是订时器间隔调用时间
+//                CountDownTimer countDownTimer = new CountDownTimer(100000, 1000) {
+//                    @Override
+//                    public void onTick(long millisUntilFinished) {
+//                        int progress = myBinder.getProgress();
+//                        progressBar.setProgress(progress);
+//                    }
+//                    @Override
+//                    public void onFinish() {
+//                        progressBar.setProgress(100);
+//                    }
+//                };
+//                countDownTimer.start();
 
 
             }
