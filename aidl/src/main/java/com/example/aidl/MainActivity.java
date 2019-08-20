@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+
+import com.example.service.IMyAidlInterface;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +45,12 @@ public class MainActivity extends AppCompatActivity {
         conn=new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-
+                IMyAidlInterface myAidlInterface = IMyAidlInterface.Stub.asInterface(service);
+                try {
+                    myAidlInterface.showProgress();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
 
             }
 
