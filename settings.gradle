@@ -1,1 +1,1 @@
-include ':showappinfo', ':service'
+include ':showappinfo', ':service', ':aidl'
