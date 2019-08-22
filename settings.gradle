@@ -1,1 +1,1 @@
-include ':showappinfo', ':service', ':aidl'
+include ':showappinfo', ':service', ':aidl', ':contentprovider', ':contentresolver'
