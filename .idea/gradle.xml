@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/aidl" />
+            <option value="$PROJECT_DIR$/callsytemcontentprovider" />
             <option value="$PROJECT_DIR$/contentprovider" />
             <option value="$PROJECT_DIR$/contentresolver" />
             <option value="$PROJECT_DIR$/service" />

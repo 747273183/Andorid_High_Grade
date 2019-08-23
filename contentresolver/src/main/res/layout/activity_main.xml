@@ -30,6 +30,7 @@
             android:id="@+id/rb_man"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="男"
             />
         <RadioButton
@@ -44,6 +45,7 @@
         android:id="@+id/et_age"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="0"
         android:hint="年龄"
         />
 
@@ -71,7 +73,26 @@
             android:layout_height="wrap_content"
             android:text="删除"
             ></Button>
+        <Button
+            android:id="@+id/btn_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查询"
+            ></Button>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_uriMatcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="利用uriMatcher去解析Uri(以查询为例)"
+        />
+    <Button
+        android:id="@+id/btn_uri"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="利用自带的解析方法去解析Uri(以添加为例)"
+        />
 
     <ListView
         android:id="@+id/lv"

@@ -49,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
     Button btnDel;
     @BindView(R.id.lv)
     ListView lv;
+    @BindView(R.id.btn_query)
+    Button btnQuery;
+    @BindView(R.id.btn_uriMatcher)
+    Button btnUriMatcher;
+    @BindView(R.id.btn_uri)
+    Button btnUri;
     private ContentResolver resolver;
     private Cursor cursor;
     private SimpleCursorAdapter adapter;
@@ -66,76 +72,88 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //获得内容解析器
-        resolver=getContentResolver();
+        resolver = getContentResolver();
 
-        //给listview设置适配器,让listview显示数据
-        cursor = resolver.query(Uri.parse(URI+"/query"), null, null, null);
-        Log.d(TAG, "onCreate: "+cursor.getCount());
-        String[] from={"_id","name","gender","age"};
-        int[] to={R.id.tv_id,R.id.tv_name,R.id.tv_gender,R.id.tv_age};
-        adapter = new SimpleCursorAdapter(this,R.layout.item_listiview,
-                cursor,from,to,SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-        lv.setAdapter(adapter);
 
         //list列表项被单击事件
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              Cursor cursor= (Cursor) parent.getItemAtPosition(position);
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 int _id = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String gender = cursor.getString(2);
                 int age = cursor.getInt(3);
 
-                tvId.setText(_id+"");
+                tvId.setText(_id + "");
                 etName.setText(name);
-                if ("男".equals(gender))
-                {
+                if ("男".equals(gender)) {
                     rbMan.setChecked(true);
-                }
-                else
-                {
+                } else {
                     rbWoman.setChecked(true);
                 }
 
-                etAge.setText(age+"");
+                etAge.setText(age + "");
 
-                MainActivity.this.id=_id;
+                MainActivity.this.id = _id;
             }
         });
 
 
     }
 
-    @OnClick({R.id.btn_add, R.id.btn_update, R.id.btn_del})
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @OnClick({R.id.btn_add, R.id.btn_update, R.id.btn_del, R.id.btn_query, R.id.btn_uriMatcher,R.id.btn_uri})
     public void onClick(View view) {
         String name = etName.getText().toString();
-        RadioButton radioButton=  rgSex.findViewById( rgSex.getCheckedRadioButtonId());
+        RadioButton radioButton = rgSex.findViewById(rgSex.getCheckedRadioButtonId());
         String gender = radioButton.getText().toString();
-        Integer age =new Integer(etAge.getText().toString()) ;
-        ContentValues values=new ContentValues();
-        values.put("name",name);
-        values.put("gender",gender);
-        values.put("age",age);
+        Integer age = new Integer(etAge.getText().toString());
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("gender", gender);
+        values.put("age", age);
 
 
         switch (view.getId()) {
             case R.id.btn_add:
-                Uri uri = resolver.insert(Uri.parse(URI+"/insert"), values);
+                Uri uri = resolver.insert(Uri.parse(URI + "/insert"), values);
                 long id = ContentUris.parseId(uri);
-                Toast.makeText(this, "添加成功,新数据id="+id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "添加成功,新数据id=" + id, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_update:
-                values.put("_id", this.id +"");
-                int update = resolver.update(Uri.parse(URI+"/insert"), values, "_id=?", new String[]{this.id + ""});
-                Toast.makeText(this, "修改成功,受影响的记录行数="+update, Toast.LENGTH_SHORT).show();
+                values.put("_id", this.id + "");
+                int update = resolver.update(Uri.parse(URI + "/update"), values, "_id=?", new String[]{this.id + ""});
+                Toast.makeText(this, "修改成功,受影响的记录行数=" + update, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_del:
-                int delete = resolver.delete(Uri.parse(URI+"/insert"), "_id=?", new String[]{this.id + ""});
-                Toast.makeText(this, "删除成功,受影响的记录行数="+delete, Toast.LENGTH_SHORT).show();
+                int delete = resolver.delete(Uri.parse(URI + "/delete"), "_id=?", new String[]{this.id + ""});
+                Toast.makeText(this, "删除成功,受影响的记录行数=" + delete, Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btn_query:
+                //给listview设置适配器,让listview显示数据
+                cursor = resolver.query(Uri.parse(URI + "/query"), null, null, null);
+                Log.d(TAG, "onCreate: " + cursor.getCount());
+                String[] from = {"_id", "name", "gender", "age"};
+                int[] to = {R.id.tv_id, R.id.tv_name, R.id.tv_gender, R.id.tv_age};
+                adapter = new SimpleCursorAdapter(this, R.layout.item_listiview,
+                        cursor, from, to, SimpleCursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+                lv.setAdapter(adapter);
+                break;
+            case R.id.btn_uriMatcher:
+                cursor = resolver.query(Uri.parse(URI + "/query/byName"), null, null, null);
+                cursor = resolver.query(Uri.parse(URI + "/query/1101"), null, null, null);
+                cursor = resolver.query(Uri.parse(URI + "/query/byName1101"), null, null, null);
+                break;
+            case R.id.btn_uri:
+                Uri uri2 = resolver.insert(Uri.parse(URI + "/whatever?name="+name+"&gender="+gender+"&age="+age), new ContentValues());
+                Toast.makeText(this, "添加成功,新的id"+ContentUris.parseId(uri2), Toast.LENGTH_SHORT).show();
+                break;
+
         }
-        adapter.notifyDataSetChanged();
+
 
     }
+
+
 }
