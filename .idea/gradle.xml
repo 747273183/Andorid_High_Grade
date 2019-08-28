@@ -12,8 +12,11 @@
             <option value="$PROJECT_DIR$/callsytemcontentprovider" />
             <option value="$PROJECT_DIR$/contentprovider" />
             <option value="$PROJECT_DIR$/contentresolver" />
+            <option value="$PROJECT_DIR$/menudemo" />
+            <option value="$PROJECT_DIR$/menudemocontentresolver" />
             <option value="$PROJECT_DIR$/service" />
             <option value="$PROJECT_DIR$/showappinfo" />
+            <option value="$PROJECT_DIR$/udpserver" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
