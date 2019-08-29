@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class UDPClient {
 
-    private String serverIP="10.20.8.23";
+    private String serverIP="192.168.56.1";
     private InetAddress inetAddress;
     private int serverPort=7777;
     private DatagramSocket socket;
@@ -37,23 +37,25 @@ public class UDPClient {
     public void start()
     {
         try {
-            //发送数据到服务端
-            System.out.println("Client说:");
-            String clientMsg=scanner.next();
-            byte[] clientMsgBytes= clientMsg.getBytes();
-            DatagramPacket clientPacket=new DatagramPacket(clientMsgBytes,clientMsgBytes.length,inetAddress,serverPort);
-            socket.send(clientPacket);
-            //接收服务端的数据
+            while (true) {
+                //发送数据到服务端
+                System.out.println("Client说:");
+                String clientMsg = scanner.next();
+                byte[] clientMsgBytes = clientMsg.getBytes();
+                DatagramPacket clientPacket = new DatagramPacket(clientMsgBytes, clientMsgBytes.length, inetAddress, serverPort);
+                socket.send(clientPacket);
+                //接收服务端的数据
 
-            byte[] buf=new byte[1024];
-            DatagramPacket serverPacket=new DatagramPacket(buf,0,buf.length);
-            socket.receive(serverPacket);
+                byte[] buf = new byte[1024];
+                DatagramPacket serverPacket = new DatagramPacket(buf, 0, buf.length);
+                socket.receive(serverPacket);
 
-            String hostAddress = serverPacket.getAddress().getHostAddress();
-            int port = serverPacket.getPort();
-            String serverMsg=new String(serverPacket.getData(),0,serverPacket.getLength());
-            Log.d(TAG, hostAddress+":"+serverMsg);
+                String hostAddress = serverPacket.getAddress().getHostAddress();
+                int port = serverPacket.getPort();
+                String serverMsg = new String(serverPacket.getData(), 0, serverPacket.getLength());
+                System.out.println("hostAddress:" + serverMsg);
 
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

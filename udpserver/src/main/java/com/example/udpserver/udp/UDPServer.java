@@ -38,13 +38,19 @@ public class UDPServer {
                 socket.receive(receivedPacket);
                 String hostAddress = receivedPacket.getAddress().getHostAddress();
                 int port = receivedPacket.getPort();
-                String clientMsg = new String(receivedPacket.getData(), 0,
-                        receivedPacket.getLength());
-                Log.d(TAG, hostAddress + ":" + clientMsg);
+                String clientMsg = new String(
+                        receivedPacket.getData(),
+                        0,
+                        receivedPacket.getLength()
+                );
+                System.out.println(hostAddress+":"+port+"说:"+clientMsg);
                 //向客户端发送消息
                 String sendMsg = scanner.next();
-                DatagramPacket sendP = new DatagramPacket(sendMsg.getBytes(), sendMsg.getBytes().length,
-                        receivedPacket.getSocketAddress());
+                DatagramPacket sendP = new DatagramPacket(
+                        sendMsg.getBytes(),
+                        sendMsg.getBytes().length,
+                        receivedPacket.getSocketAddress()
+                );
                 socket.send(sendP);
             }
         } catch (IOException e) {

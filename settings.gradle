@@ -1,1 +1,1 @@
-include ':showappinfo', ':service', ':aidl', ':contentprovider', ':contentresolver', ':callsytemcontentprovider', ':menudemo', ':menudemocontentresolver', ':udpserver'
+include ':showappinfo', ':service', ':aidl', ':contentprovider', ':contentresolver', ':callsytemcontentprovider', ':menudemo', ':menudemocontentresolver', ':udpserver', ':udpdemo'
