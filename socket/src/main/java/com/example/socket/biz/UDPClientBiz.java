@@ -1,9 +1,8 @@
-package com.example.udpserver.biz;
+package com.example.socket.biz;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -13,19 +12,18 @@ import java.util.Scanner;
 
 public class UDPClientBiz {
 
-    private String serverIP="192.168.56.1";
+    private String serverIP = "192.168.56.1";
     private InetAddress inetAddress;
-    private int serverPort=7777;
+    private int serverPort = 7777;
     private DatagramSocket socket;
     private Scanner scanner;
 
     private static final String TAG = "UDPClient";
 
-    public UDPClientBiz()
-    {
+    public UDPClientBiz() {
         try {
-            inetAddress=InetAddress.getByName(serverIP);
-            socket=new DatagramSocket();
+            inetAddress = InetAddress.getByName(serverIP);
+            socket = new DatagramSocket();
 
         } catch (SocketException e) {
             e.printStackTrace();
@@ -34,17 +32,18 @@ public class UDPClientBiz {
         }
     }
 
-    public interface  OnMsgReturnedListener
-    {
+    public interface OnMsgReturnedListener {
         void onMsgReturned(String msg);
+
         void onError(Exception ex);
     }
 
-    private Handler handler=new Handler(Looper.getMainLooper());
-    public void sendMsg(final String msg, final OnMsgReturnedListener onMsgReturnedListener)
-    {
+    //参数Looper.getMainLooper()说明这个handler是一个更新UI的
+    private Handler handler = new Handler(Looper.getMainLooper());
 
-        new Thread(){
+    public void sendMsg(final String msg, final OnMsgReturnedListener onMsgReturnedListener) {
+
+        new Thread() {
             @Override
             public void run() {
                 super.run();
@@ -62,6 +61,8 @@ public class UDPClientBiz {
                     String hostAddress = serverPacket.getAddress().getHostAddress();
                     int port = serverPacket.getPort();
                     final String serverMsg = new String(serverPacket.getData(), 0, serverPacket.getLength());
+
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -84,14 +85,11 @@ public class UDPClientBiz {
 
     }
 
-    public  void onDestory()
-    {
-        if (socket!=null)
-        {
+    public void onDestory() {
+        if (socket != null) {
             socket.close();
         }
     }
-
 
 
 }

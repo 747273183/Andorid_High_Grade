@@ -1,6 +1,4 @@
-package com.example.udpserver.udp;
-
-import android.util.Log;
+package com.example.socket.udp;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
