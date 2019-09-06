@@ -6,14 +6,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.socket.R;
-import com.example.socket.biz.UDPClientBiz;
+import com.example.socket.biz.TCPClientBiz;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UDPClientActivity extends AppCompatActivity {
+public class TCPActivity extends AppCompatActivity {
 
     @BindView(R.id.et_client)
     EditText etClient;
@@ -21,7 +20,7 @@ public class UDPClientActivity extends AppCompatActivity {
     Button btnSend;
     @BindView(R.id.tv_content)
     TextView tvContent;
-    private UDPClientBiz udpClientBiz=new UDPClientBiz();
+    private TCPClientBiz udpClientBiz=new TCPClientBiz();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,27 +28,34 @@ public class UDPClientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        udpClientBiz.setListener(new TCPClientBiz.OnMsgComingListener() {
+            @Override
+            public void onMsgComing(String msg) {
+                appendMsgToContent(msg);
+            }
+
+            @Override
+            public void onError(Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
     }
 
 
     @OnClick(R.id.btn_send)
     public void onClick() {
         String msg=etClient.getText().toString();
-        appendMsgToContent("Client:"+msg);
-        udpClientBiz.sendMsg(msg, new UDPClientBiz.OnMsgReturnedListener() {
-             @Override
-             public void onMsgReturned(String msg) {
-                 appendMsgToContent("Server:"+msg);
-             }
-
-             @Override
-             public void onError(Exception ex) {
-                ex.printStackTrace();
-             }
-         });
+        udpClientBiz.sendMsg(msg);
     }
 
     private void appendMsgToContent(String s) {
         tvContent.append(s+"\n");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        udpClientBiz.destory();
     }
 }
