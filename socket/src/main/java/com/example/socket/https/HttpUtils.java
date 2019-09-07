@@ -1,10 +1,27 @@
 package com.example.socket.https;
 
+import android.content.Context;
+
+import com.example.socket.biz.TCPClientBiz;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 public class HttpUtils {
 
@@ -15,7 +32,7 @@ public class HttpUtils {
         void onFail(Exception ex);
     }
 
-    public  static void doGet(final String urlStr, final HttpListener listener)
+    public  static void doGet(final Context context, final String urlStr, final HttpListener listener)
     {
         new Thread(){
             @Override
@@ -23,7 +40,24 @@ public class HttpUtils {
                 super.run();
                 try {
                     URL url=new URL(urlStr);
-                   HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+                   HttpsURLConnection conn= (HttpsURLConnection) url.openConnection();
+
+                   //https
+                    SSLContext sslContext=SSLContext.getInstance("TLS");
+                    X509Certificate certificate=getCert(context);
+                    TrustManager[] trustManagers={new MyX509TrustManager(certificate)};
+                    sslContext.init(null,trustManagers,new SecureRandom());
+                    SSLSocketFactory socketFactory = sslContext.getSocketFactory();
+                    conn.setSSLSocketFactory(socketFactory);
+                    conn.setHostnameVerifier(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String hostname, SSLSession session) {
+                            HostnameVerifier defaultHostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+
+                            return defaultHostnameVerifier.verify("kyfw.12306.cn",session);
+                        }
+                    });
+
                    conn.setDoInput(true);
                    conn.setDoOutput(true);
                    conn.setRequestMethod("GET");
@@ -45,7 +79,11 @@ public class HttpUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                     listener.onFail(e);
-                }finally {
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                } finally {
                     try {
                         if (is!=null)
                         {
@@ -57,6 +95,19 @@ public class HttpUtils {
                 }
             }
         }.start();
+    }
+
+    private static X509Certificate getCert(Context context) {
+        try {
+            context.getAssets().open("srca.cer");
+            CertificateFactory certificateFactory=CertificateFactory.getInstance("X.509");
+          return (X509Certificate) certificateFactory.generateCertificate(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        }
+        return  null;
     }
 
 }

@@ -35,7 +35,7 @@ public class HttpActivity extends AppCompatActivity {
     @OnClick(R.id.btn_send)
     public void onClick() {
         String url=etClient.getText().toString();
-        HttpUtils.doGet(url, new HttpUtils.HttpListener() {
+        HttpUtils.doGet(getApplicationContext(),url, new HttpUtils.HttpListener() {
             @Override
             public void onSuccess(final String context) {
                 tvContent.post(new Runnable() {
