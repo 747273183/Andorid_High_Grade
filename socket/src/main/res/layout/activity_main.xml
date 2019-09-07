@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:text="http://www.imooc.com/user/feedback"
             android:id="@+id/et_client"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
